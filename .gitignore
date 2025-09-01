@@ -1,0 +1,63 @@
+# --- Python cache/artifacts ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.dll
+
+# Byte-compiled / packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+pip-wheel-metadata/
+__pypackages__/
+
+# Tests / coverage / type-checkers
+.pytest_cache/
+.coverage*
+htmlcov/
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Virtual environments
+.rag_scheduler_venv/
+rag_scheduler_venv/
+ENV/
+env/
+
+# Local runtime & logs
+logs/
+!logs/.gitkeep
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.sample
+
+# Config: keep sample, ignore real
+config.yaml
+!config.yaml.sample
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.swp
+*.swo
+.python-version
+.tool-versions
