@@ -1,0 +1,130 @@
+multi-activity-poller/
+├─ poll_multi.py
+├─ requirements.txt
+├─ .env.sample
+├─ config.yaml.sample
+└─ logs/                # auto-created by the script (no need to make manually)
+
+
+# Create project
+mkdir -p multi-activity-poller && cd multi-activity-poller
+
+# Add the four files above here (poll_multi.py, requirements.txt, .env.sample, config.yaml.sample)
+cp .env.sample .env
+cp config.yaml.sample config.yaml
+
+rag_scheduler_server
+
+# Create & activate rag_scheduler_venv
+python3 -m venv .rag_scheduler_venv
+source .rag_scheduler_venv/bin/activate
+
+# Install deps
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Run forever (each job on its own interval)
+python poll_multi.py
+
+RUN_ONCE=1 python poll_multi.py
+
+
+
+http://localhost:5001/cron/get_device_list?page=1&limit=5
+http://localhost:5001/cron/get_user_list?page=1&limit=10
+http://localhost:5001/cron/get_user_leave_list?page=1&limit=10
+http://localhost:5001/cron/get_holiday_list?page=1&limit=5
+http://localhost:5001/cron/get_activity_list?page=1&limit=10000
+
+
+
+{
+  "status_code": "200",
+  "message": "Total devices upserted is 6",
+  "data": { "total_records": 6 }
+}
+```)  
+we can reuse the same parse rules for all jobs:
+
+- `count_key: "data.total_records"` (preferred)  
+- `message_count_regex: "is\\s+(\\d+)$"` (fallback)
+
+Here’s the **ready-to-use `config.yaml`** for your 5 endpoints:
+
+---
+
+## config.yaml
+
+```yaml
+jobs:
+  - name: devices
+    base_url: "http://localhost:5001/cron/get_device_list"
+    limit: 5
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200        # up to 20 mins per request
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: users
+    base_url: "http://localhost:5001/cron/get_user_list"
+    limit: 10
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: user-leave
+    base_url: "http://localhost:5001/cron/get_user_leave_list"
+    limit: 10
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: holidays
+    base_url: "http://localhost:5001/cron/get_holiday_list"
+    limit: 5
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: activities
+    base_url: "http://localhost:5001/cron/get_activity_list"
+    limit: 10000
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+

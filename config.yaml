@@ -1,0 +1,70 @@
+jobs:
+  - name: devices
+    base_url: "http://localhost:5001/cron/get_device_list"
+    limit: 5
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: users
+    base_url: "http://localhost:5001/cron/get_user_list"
+    limit: 10
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: user-leave
+    base_url: "http://localhost:5001/cron/get_user_leave_list"
+    limit: 10
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: holidays
+    base_url: "http://localhost:5001/cron/get_holiday_list"
+    limit: 5
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
+
+  - name: activities
+    base_url: "http://localhost:5001/cron/get_activity_list"
+    limit: 10000
+    start_page: 1
+    interval_minutes: 10
+    schedule_mode: fixed_delay
+    allow_overlap: false
+    timeout_seconds: 1200
+    retry_max: 3
+    retry_base_ms: 1200
+    count_key: "data.total_records"
+    message_count_regex: "is\\s+(\\d+)$"
+    enabled: true
